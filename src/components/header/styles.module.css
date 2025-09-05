@@ -1,0 +1,38 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 40px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #dddddd;
+  width: 100%;
+  min-height: 128px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 70px;
+}
+
+.nav .menu {
+  list-style: none;
+  display: flex;
+  gap: 4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav .menu li a {
+  text-decoration: none;
+  color: #282828;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.nav .menu li a:hover {
+  color: #007bff;
+}
