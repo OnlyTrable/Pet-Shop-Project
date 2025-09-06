@@ -5,7 +5,7 @@ import whatsappIcon from "../../assets/icons/whatsapp.svg";
 function Footer (){
   const address = "Wallstraße 9-13, 10179 Berlin, Deutschland";
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-  const googleMapsEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const googleMapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(address)}&z=15&output=embed`;
 
     return (
     <footer className={style.footer}>
@@ -40,7 +40,7 @@ function Footer (){
         </div>
       </div>
       <div className={style.mapContainer}>
-        <iframe src={googleMapsEmbedUrl} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={`Google Map of ${address}`}></iframe>
+        <iframe src={googleMapsEmbedUrl} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" title={`Google Map of ${address}`}></iframe>
       </div>
     </footer>)
 }

@@ -1,0 +1,113 @@
+.heroSection {
+  background-image: url("../../assets/images/pets.jpg");
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  transform: scaleX(-1);
+}
+
+.heroContent {
+  text-align: left;
+  transform: scaleX(-1);
+}
+
+.heroContent h1 {
+  font-family: "Montserrat";
+  font-weight: 700;
+  font-size: 96px;
+  line-height: 1.1;
+  color: #ffffff;
+  margin: 0 0 40px 0;
+}
+
+.categoriesSection {
+  padding: 40px;
+  text-align: left;
+}
+
+.categoriesHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+}
+
+.divider {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #dddddd;
+  margin: 0 0 0 32px;
+}
+
+.title {
+  font-size: 64px;
+  font-weight: 700;
+  margin: 0;
+  color: #282828;
+}
+
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.categoryCard {
+  text-decoration: none;
+}
+
+.categoryImage {
+  width: 100%;
+  padding-bottom: 100%; /* for a square aspect ratio */
+  background-color: #f1f3f4; /* placeholder */
+  border-radius: 12px;
+  margin-bottom: 20px;
+  background-size: cover;
+  background-position: center;
+}
+
+.categoryCard p {
+  font-size: 20px;
+  font-weight: 600;
+  color: #282828;
+  margin: 0;
+  text-align: center;
+}
+
+/* Discount Section */
+.discountSection {
+  background: linear-gradient(261.47deg, #2451c6 32.63%, #0d50ff 98.96%);
+  border-radius: 12px;
+  padding: 32px;
+  margin: 40px;
+  display: grid;
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+.discountTitle {
+  font-family: "Montserrat";
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  text-align: center;
+  color: #ffffff;
+  margin: 0;
+}
+
+.discountImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.discountForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
