@@ -7,14 +7,28 @@ const HomeButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(4),
   padding: '12px 24px',
   textTransform: 'none',
-  fontSize: '1.1rem',
+  fontSize: '20px',
   fontWeight: 600,
   backgroundColor: '#0D50FF',
   '&:hover': {
     backgroundColor: '#0D50AA',
   },
 }));
-
+const PageNotFoundTitle = styled(Typography)(({ theme }) => ({
+  fontWeight: 700,
+  fontSize: '64px',
+  letterSpacing: 0,
+  textAlign: 'center',
+  color: theme.palette.text.primary, // Використовуємо колір з теми
+  marginBottom: '24px',
+}));
+const Body1 = styled(Typography)(({ theme }) => ({
+  fontWeight: 400,
+  fontSize: '20px',
+  letterSpacing: 0,
+  textAlign: 'center',
+  color: theme.palette.tertiary.main, // Використовуємо колір з теми
+}));
 function NotFoundPage() {
   return (
     <Box component="main" className={style.main}>
@@ -23,15 +37,15 @@ function NotFoundPage() {
         <img src={likeZeroImage} alt="0" className={style.titleImage} />
         <span className={style.titleDigit}>4</span>
       </div>
-      <Typography variant="h2" component="h2" className={style.pageNotFoundTitle}>
+      <PageNotFoundTitle variant="h2">
         Page Not Found
-      </Typography>
-      <Typography variant="h5" component="p" className={style.subtitle}>
+      </PageNotFoundTitle>
+      <Body1 variant="body1">
         We’re sorry, the page you requested could not be found.
-      </Typography>
-      <Typography variant="body1" className={style.text}>
+      </Body1>
+      <Body1 variant="body1">
         Please go back to the homepage.
-      </Typography>
+      </Body1>
       <HomeButton component={Link} to="/" variant="contained">
         Go Home
       </HomeButton>
