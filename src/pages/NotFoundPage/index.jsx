@@ -3,17 +3,6 @@ import { Link } from 'react-router-dom';
 import style from './styles.module.css';
 import likeZeroImage from '../../assets/images/like_zero.png';
 
-const HomeButton = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(4),
-  padding: '12px 24px',
-  textTransform: 'none',
-  fontSize: '20px',
-  fontWeight: 600,
-  backgroundColor: '#0D50FF',
-  '&:hover': {
-    backgroundColor: '#0D50AA',
-  },
-}));
 const PageNotFoundTitle = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   fontSize: '64px',
@@ -46,9 +35,14 @@ function NotFoundPage() {
       <Body1 variant="body1">
         Please go back to the homepage.
       </Body1>
-      <HomeButton component={Link} to="/" variant="contained">
+      <Button
+        component={Link}
+        to="/"
+        variant="cta"
+        sx={{ mt: 4, width: 'auto' }} // Додаємо відступ зверху через sx
+      >
         Go Home
-      </HomeButton>
+      </Button>
     </Box>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import style from './styles.module.css';
 import { Link } from 'react-router-dom';
@@ -9,74 +9,107 @@ import {
   selectCategoriesError,
   selectCategoriesStatus,
 } from '../../redux/slices/categoriesSlice';
+import {
+  fetchProducts,
+  selectProducts,
+  selectProductsError,
+  selectProductsStatus,
+} from '../../redux/slices/productsSlice';
 import { API_BASE_URL } from '../../redux';
 import discountImage from '../../assets/images/discount.png';
 
-const HeroButton = styled(Button)({
-  width: '218px',
-  height: '58px',
-  backgroundColor: '#0D50FF',
-  color: '#FFFFFF',
-  fontWeight: 600,
-  fontSize: '20px',
-  padding: '16px 56px',
-  borderRadius: '6px',
-  textTransform: 'none',
-  '&:hover': {
-    backgroundColor: '#0D50AA',
-  },
-});
-
-const AllCategoriesButton = styled(Button)({
-  width: '142px',
-  height: '36px',
-  color: '#8B8B8B',
-  fontWeight: 500,
-  fontSize: '16px',
-  padding: '8px 16px',
-  border: '1px solid #DDDDDD',
-  borderRadius: '6px',
-  textTransform: 'none',
-  '&:hover': {
-    backgroundColor: '#282828',
-    color: '#fff',
-    borderColor: '#282828',
-  },
-});
-
 const DiscountInput = styled(TextField)({
-  backgroundColor: 'white',
-  borderRadius: '6px',
-  '& .MuiOutlinedInput-root fieldset': {
-    border: 'none',
-  },
-});
-
-const DiscountButton = styled(Button)({
-  width: '100%',
-  height: '58px',
-  backgroundColor: '#FFFFFF',
-  color: '#282828',
-  fontWeight: 600,
-  fontSize: '20px',
-  borderRadius: '6px',
-  textTransform: 'none',
-  '&:hover': {
-    backgroundColor: '#f0f0f0',
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#FFFFFF', // Потрібний колір рамки
+    },
+    '&:hover fieldset': {
+      borderColor: '#FFFFFF', // Колір рамки при наведенні
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#FFFFFF', // Колір рамки при фокусі
+    },
+    // Стилі для самого поля вводу
+    '& .MuiInputBase-input': {
+      color: '#FFFFFF', // Колір тексту, що вводиться
+      '&::placeholder': {
+        color: '#FFFFFF', // Колір плейсхолдера
+        opacity: 1, // Забираємо прозорість плейсхолдера
+      },
+    },
+    // Стилі для тексту-підказки (helperText)
+    '& .MuiFormHelperText-root': {
+      color: '#FFFFFF',
+    },
   },
 });
 
 function MainPage() {
+  const [formValues, setFormValues] = useState({
+    name: '',
+    phone: '',
+    email: '',
+  });
+  const [formErrors, setFormErrors] = useState({
+    name: '',
+    phone: '',
+    email: '',
+  });
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories);
   const status = useSelector(selectCategoriesStatus);
   const error = useSelector(selectCategoriesError);
 
+  const products = useSelector(selectProducts);
+  const productsStatus = useSelector(selectProductsStatus);
+  const productsError = useSelector(selectProductsError);
+
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchCategories());
     }
-  }, [status, dispatch]);
+    if (productsStatus === 'idle') {
+      dispatch(fetchProducts());
+    }
+  }, [status, productsStatus, dispatch]);
+
+  useEffect(() => {
+    const nameIsValid = formValues.name.length >= 3;
+    const phoneIsValid = /^\+\d{12}$/.test(formValues.phone);
+    // A practical, robust regex for email validation based on RFC 5322.
+    const emailIsValid = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i.test(formValues.email);
+
+    setIsFormValid(nameIsValid && phoneIsValid && emailIsValid);
+  }, [formValues]);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({ ...formValues, [name]: value });
+
+    let error = '';
+    switch (name) {
+      case 'name':
+        if (value.length > 0 && value.length < 3) {
+          error = 'Name must be at least 3 characters long.';
+        }
+        break;
+      case 'phone':
+        if (value.length > 0 && !/^\+\d{12}$/.test(value)) {
+          error = 'Format: +XXXXXXXXXXXX (12 digits)';
+        }
+        break;
+      case 'email':
+        if (value.length > 0 && !/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i.test(value)) {
+          error = 'Please enter a valid email address.';
+        }
+        break;
+      default:
+        break;
+    }
+    setFormErrors({ ...formErrors, [name]: error });
+  };
 
   const randomCategories = useMemo(() => {
     if (categories.length > 0) {
@@ -86,10 +119,23 @@ function MainPage() {
     return [];
   }, [categories]);
 
+  const saleProducts = useMemo(() => {
+    if (products.length > 0) {
+      const discounted = products.filter(product => product.discont_price);
+      const shuffled = [...discounted].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 4);
+    }
+    return [];
+  }, [products]);
+
   const handleDiscountSubmit = (event) => {
     event.preventDefault();
-    // Тут буде логіка для обробки форми
-    console.log('Форма знижки відправлена!');
+    if (isFormValid) {
+      console.log('Форма знижки відправлена!', formValues);
+      // Тут буде логіка для відправки даних на сервер
+    } else {
+      console.log('Форма містить помилки.');
+    }
   };
 
 
@@ -98,22 +144,22 @@ function MainPage() {
       <section className={style.heroSection}>
         <div className={style.heroContent}>
           <h1>Amazing Discounts on Pets Products!</h1>
-          <HeroButton component={Link} to="/sales" variant="contained">
+          <Button component={Link} to="/sales" variant="cta">
             Check out
-          </HeroButton>
+          </Button>
         </div>
       </section>
       <section className={style.categoriesSection}>
         <div className={style.categoriesHeader}>
           <h2 className={style.title}>Categories</h2>
           <div className={style.divider}></div>
-          <AllCategoriesButton
+          <Button
             component={Link}
             to="/categories"
-            variant="outlined"
+            variant="all-categories"
           >
             All categories
-          </AllCategoriesButton>
+          </Button>
         </div>
         <div className={style.categoriesGrid}>
           {status === 'loading' && <p>Loading categories...</p>}
@@ -147,29 +193,86 @@ function MainPage() {
           <Grid size={{ xs: 12, md: 5 }}>
             <form className={style.discountForm} onSubmit={handleDiscountSubmit}>
               <DiscountInput
+                name="name"
+                value={formValues.name}
+                onChange={handleInputChange}
                 variant="outlined"
                 placeholder="Name"
                 fullWidth
+                error={!!formErrors.name}
+                helperText={formErrors.name}
               />
               <DiscountInput
+                name="phone"
+                value={formValues.phone}
+                onChange={handleInputChange}
                 variant="outlined"
                 placeholder="Phone number"
                 fullWidth
+                error={!!formErrors.phone}
+                helperText={formErrors.phone}
               />
               <DiscountInput
+                name="email"
+                value={formValues.email}
+                onChange={handleInputChange}
                 variant="outlined"
                 placeholder="Email"
                 fullWidth
+                error={!!formErrors.email}
+                helperText={formErrors.email}
               />
-              <DiscountButton
-                variant="contained"
+              <Button
+                variant="discount"
                 type="submit"
+                disabled={!isFormValid}
               >
                 Get a discount
-              </DiscountButton>
+              </Button>
             </form>
           </Grid>
         </Grid>
+      </section>
+            <section className={style.saleSection}>
+        <div className={style.categoriesHeader}>
+          <h2 className={style.title}>Sale</h2>
+          <div className={style.divider}></div>
+          <Button
+            component={Link}
+            to="/sales"
+            variant="all-categories"
+          >
+            All sales
+          </Button>
+        </div>
+        <div className={style.categoriesGrid}>
+          {productsStatus === 'loading' && <p>Loading products...</p>}
+          {productsStatus === 'failed' && <p>Error: {productsError}</p>}
+          {productsStatus === 'succeeded' &&
+            (saleProducts.length > 0 ? (
+              saleProducts.map(product => (
+                <Link to={`/products/${product.id}`} key={product.id} className={style.productCard}>
+                  <div className={style.productImageContainer}>
+                    <div
+                      className={style.productImage}
+                      style={{ backgroundImage: `url(${API_BASE_URL}${product.image})` }}
+                    />
+                    <div className={style.discountBadge}>
+                      -{Math.round(((product.price - product.discont_price) / product.price) * 100)}%
+                    </div>
+                    <Button className={style.addToCartButton}>Add to cart</Button>
+                  </div>
+                  <div className={style.priceContainer}>
+                    <p className={style.discountPrice}>${product.discont_price}</p>
+                    <p className={style.originalPrice}>${product.price}</p>
+                  </div>
+                  <p className={style.productTitle}>{product.title}</p>
+                </Link>
+              ))
+            ) : (
+              <p>No sale products found.</p>
+            ))}
+        </div>
       </section>
     </main>
   );

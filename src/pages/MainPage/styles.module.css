@@ -78,6 +78,121 @@
   text-align: center;
 }
 
+/* Sale Section */
+.saleSection {
+  padding: 40px;
+  text-align: left;
+}
+
+.productCard {
+  text-decoration: none;
+  color: #282828;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.productImageContainer {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* for a square aspect ratio */
+  margin-bottom: 20px;
+  overflow: hidden; /* To hide the button when it's outside */
+}
+
+.productImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f1f3f4; /* placeholder */
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease;
+}
+
+.productCard:hover .productImage {
+  transform: scale(1.05);
+}
+
+.discountBadge {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background-color: #0d50ff; /* Using primary color from theme */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: 600;
+  z-index: 1;
+}
+
+.addToCartButton {
+  position: absolute !important;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%); /* Start hidden below */
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
+  background-color: #0d50ff !important;
+  color: white !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  border-radius: 6px !important;
+  width: calc(100% - 32px);
+  z-index: 2;
+}
+
+.addToCartButton:hover {
+  background-color: #282828 !important;
+}
+
+.productCard:hover .addToCartButton {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.discountPrice {
+  font-size: 40px;
+  font-weight: 600;
+  color: #282828;
+  margin: 0;
+}
+
+.originalPrice {
+  font-size: 20px;
+  font-weight: 500;
+  color: #8b8b8b; /* tertiary color */
+  text-decoration: line-through;
+  margin: 0;
+}
+
+.productTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #282828;
+  margin: 0;
+  text-align: left;
+  /* Allow for two lines of text, then truncate */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 40px; /* approx 2 lines */
+}
+
 /* Discount Section */
 .discountSection {
   background: linear-gradient(261.47deg, #2451c6 32.63%, #0d50ff 98.96%);

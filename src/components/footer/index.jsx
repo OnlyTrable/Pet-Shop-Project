@@ -1,8 +1,11 @@
+import { useState } from "react";
+import { CircularProgress } from "@mui/material";
 import style from "./styles.module.css"
 import instagramIcon from "../../assets/icons/instagram.svg";
 import whatsappIcon from "../../assets/icons/whatsapp.svg";
 
 function Footer (){
+  const [isMapLoading, setIsMapLoading] = useState(true);
   const address = "Wallstraße 9-13, 10179 Berlin, Deutschland";
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
   const googleMapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(address)}&z=15&output=embed`;
@@ -40,7 +43,20 @@ function Footer (){
         </div>
       </div>
       <div className={style.mapContainer}>
-        <iframe src={googleMapsEmbedUrl} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" title={`Google Map of ${address}`}></iframe>
+        {isMapLoading && (
+          <div className={style.mapLoader}>
+            <CircularProgress />
+          </div>
+        )}
+        <iframe
+          src={googleMapsEmbedUrl}
+          style={{ border: 0, width: '100%', height: '100%', visibility: isMapLoading ? 'hidden' : 'visible' }}
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+          title={`Google Map of ${address}`}
+          onLoad={() => setIsMapLoading(false)}
+        ></iframe>
       </div>
     </footer>)
 }
