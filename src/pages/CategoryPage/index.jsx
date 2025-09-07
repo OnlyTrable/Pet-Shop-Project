@@ -24,6 +24,7 @@ import {
   selectCategoriesStatus,
 } from '../../redux/slices/categoriesSlice';
 import { addItem } from '../../redux/slices/basketSlice';
+import toast from 'react-hot-toast';
 import { API_BASE_URL } from '../../redux';
 import style from './styles.module.css';
 
@@ -62,6 +63,7 @@ function CategoryPage() {
   const handleAddToCart = (event, product) => {
     event.preventDefault();
     dispatch(addItem(product));
+    toast.success(`${product.title} added to cart!`);
   };
 
   // Filter and sort products

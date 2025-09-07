@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem } from '../../redux/slices/basketSlice';
 import style from './styles.module.css';
+import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { Button, Grid, TextField, styled } from '@mui/material';
 import {
@@ -70,6 +71,7 @@ function MainPage() {
   const handleAddToCart = (event, product) => {
     event.preventDefault();
     dispatch(addItem(product));
+    toast.success(`${product.title} added to cart!`);
   };
 
   useEffect(() => {

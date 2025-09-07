@@ -34,6 +34,10 @@ function Header() {
                 <Badge
                   badgeContent={totalItems}
                   color="primary"
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
                   invisible={totalItems === 0}
                   sx={{
                     '& .MuiBadge-badge': {
@@ -43,6 +47,8 @@ function Header() {
                       borderRadius: '50%',
                       fontSize: '0.85rem',
                       fontWeight: 600,
+                      top: -6,
+                      left: 13,
                     },
                   }}
                 >

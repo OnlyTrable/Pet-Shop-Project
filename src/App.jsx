@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import './App.css'
 
 import Header from './components/header'
@@ -31,6 +32,9 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer/>
+      <Toaster position="top-right" toastOptions={{ duration: 3000 }} containerStyle={{
+    top: 90, // Наприклад, відступ 80px зверху
+  }}/>
     </BrowserRouter>
   )
 }

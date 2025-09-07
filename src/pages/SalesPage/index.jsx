@@ -17,6 +17,7 @@ import {
   selectProductsStatus,
 } from '../../redux/slices/productsSlice';
 import { addItem } from '../../redux/slices/basketSlice';
+import toast from 'react-hot-toast';
 import { API_BASE_URL } from '../../redux';
 import style from './styles.module.css';
 
@@ -39,6 +40,7 @@ function SalesPage() {
   const handleAddToCart = (event, product) => {
     event.preventDefault();
     dispatch(addItem(product));
+    toast.success(`${product.title} added to cart!`);
   };
 
   const filteredAndSortedProducts = useMemo(() => {
