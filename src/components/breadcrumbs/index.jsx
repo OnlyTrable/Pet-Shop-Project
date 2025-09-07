@@ -47,7 +47,7 @@ function BreadcrumbsComponent() {
       aria-label="breadcrumb"
       separator={<BreadcrumbDivider />}
       sx={{
-        padding: '20px 40px',
+        padding: '8px 16px',
         '& .MuiBreadcrumbs-ol': {
           alignItems: 'center',
         },

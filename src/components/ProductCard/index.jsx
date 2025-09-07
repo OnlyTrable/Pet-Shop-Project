@@ -40,13 +40,13 @@ function ProductCard({ product }) {
           Add to cart
         </Button>
       </div>
+      <p className={style.productTitle}>{product.title}</p>
       <div className={style.priceContainer}>
         <p className={style.discountPrice}>${finalPrice.toFixed(2)}</p>
         {product.discont_price && (
           <p className={style.originalPrice}>${product.price.toFixed(2)}</p>
         )}
       </div>
-      <p className={style.productTitle}>{product.title}</p>
     </Link>
   );
 }
