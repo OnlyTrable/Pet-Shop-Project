@@ -5,13 +5,13 @@ import {
   Card,
   CircularProgress,
 } from "@mui/material";
-import DiscountForm from "../DiscountForm/index.jsx";
+import DiscountForm from "../DiscountForm";
 
 function OrderSummaryCard({
   itemsCount,
-  totalSum,
-  finalSum,
-  hasDiscount,
+  totalSum = 0,
+  finalSum = 0,
+  discountStatus,
   onOrder,
   orderStatus,
   onDiscountSuccess
@@ -64,6 +64,17 @@ function OrderSummaryCard({
         </Typography>
       </Box>
 
+      {discountStatus === 'available' && (
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Typography sx={{ fontSize: '20px', color: 'green' }}>
+            Discount (5%)
+          </Typography>
+          <Typography sx={{ fontSize: '20px', color: 'green', fontWeight: 'bold' }}>
+            -${(totalSum - finalSum).toFixed(2)}
+          </Typography>
+        </Box>
+      )}
+
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', mt: 'auto' }}>
         <Typography
           sx={{
@@ -86,16 +97,15 @@ function OrderSummaryCard({
         </Typography>
       </Box>
 
-      {hasDiscount ? (
+      {discountStatus === 'none' ? (
+        <DiscountForm variant="light" onSuccess={onDiscountSuccess} />
+      ) : (
         <Button variant="cta" fullWidth sx={{ height: '76px', fontSize: '28px', fontWeight: 700, textTransform: 'none', bgcolor: '#0D50FF', '&:hover': { bgcolor: '#282828' } }} onClick={onOrder} disabled={orderStatus === 'loading'}>
           {orderStatus === 'loading' ? <CircularProgress size={24} color="inherit" /> : 'Order'}
         </Button>
-      ) : (
-        <DiscountForm variant="light" onSuccess={onDiscountSuccess} />
       )}
     </Card>
   );
 }
 
 export default OrderSummaryCard;
-

@@ -22,13 +22,22 @@ function BasketPage() {
   const navigate = useNavigate();
   const basketItems = useSelector(selectBasket);
   const orderStatus = useSelector(selectOrderStatus);
-
-  const [hasDiscount, setHasDiscount] = useState(false);
+  const [discountStatus, setDiscountStatus] = useState('checking'); // 'checking', 'none', 'available', 'used'
 
   useEffect(() => {
     // Перевіряємо, чи має користувач право на знижку
-    const discountRequest = localStorage.getItem(DISCOUNT_REQUEST_LS_KEY);
-    setHasDiscount(!!discountRequest);
+    const discountRequestJSON = localStorage.getItem(DISCOUNT_REQUEST_LS_KEY);
+    if (discountRequestJSON) {
+      try {
+        const discountRequest = JSON.parse(discountRequestJSON);
+        setDiscountStatus(discountRequest.discountUsed ? 'used' : 'available');
+      } catch (e) {
+        console.error("Failed to parse discount request from localStorage", e);
+        setDiscountStatus('used'); // На випадок пошкоджених даних, вважаємо знижку використаною
+      }
+    } else {
+      setDiscountStatus('none');
+    }
   }, []);
 
   const handleRemove = (id) => {
@@ -46,6 +55,7 @@ function BasketPage() {
     return sum + price * item.quantity;
   }, 0);
 
+  const hasDiscount = discountStatus === 'available';
   const discountAmount = hasDiscount ? totalSum * 0.05 : 0;
   const finalSum = totalSum - discountAmount;
 
@@ -64,8 +74,18 @@ function BasketPage() {
     try {
       await dispatch(postOrder(orderData)).unwrap();
       toast.success('Your order has been placed successfully!');
-      if (hasDiscount) {
-        localStorage.removeItem(DISCOUNT_REQUEST_LS_KEY);
+      if (discountStatus === 'available') {
+        // Позначаємо знижку як використану, а не видаляємо запис
+        const discountRequestJSON = localStorage.getItem(DISCOUNT_REQUEST_LS_KEY);
+        if (discountRequestJSON) {
+          try {
+            const discountRequest = JSON.parse(discountRequestJSON);
+            discountRequest.discountUsed = true;
+            localStorage.setItem(DISCOUNT_REQUEST_LS_KEY, JSON.stringify(discountRequest));
+          } catch (e) {
+            console.error("Failed to update discount status in localStorage", e);
+          }
+        }
       }
       dispatch(clearBasket());
       navigate('/');
@@ -110,10 +130,10 @@ function BasketPage() {
               itemsCount={basketItems.length}
               totalSum={totalSum}
               finalSum={finalSum}
-              hasDiscount={hasDiscount}
+              discountStatus={discountStatus}
               onOrder={handleOrder}
               orderStatus={orderStatus}
-              onDiscountSuccess={() => setHasDiscount(true)}
+              onDiscountSuccess={() => setDiscountStatus('available')}
             />
           </Grid>
         </Grid>
