@@ -1,7 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { api } from "..";
 
 // --- LocalStorage Helpers ---
 const BASKET_STATE_LS_KEY = "petShopBasketState";
+
+// Створюємо асинхронну дію для відправки замовлення
+export const postOrder = createAsyncThunk(
+  "basket/postOrder",
+  async (orderData, { rejectWithValue }) => {
+    try {
+      // УВАГА: Це симуляція. На бекенді має бути реалізований endpoint /order/send
+      const response = await api.post("/order/send", orderData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Failed to place order");
+    }
+  }
+);
 
 const loadStateFromLocalStorage = () => {
   try {
@@ -30,7 +45,11 @@ const saveStateToLocalStorage = (state) => {
   }
 };
 
-const initialState = loadStateFromLocalStorage();
+const initialState = {
+  ...loadStateFromLocalStorage(),
+  orderStatus: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+  orderError: null,
+};
 
 const basketSlice = createSlice({
   name: "basket",
@@ -58,12 +77,34 @@ const basketSlice = createSlice({
       }
       saveStateToLocalStorage(state);
     },
+    clearBasket(state) {
+      state.items = [];
+      state.orderStatus = "idle";
+      state.orderError = null;
+      saveStateToLocalStorage(state);
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(postOrder.pending, (state) => {
+        state.orderStatus = "loading";
+        state.orderError = null;
+      })
+      .addCase(postOrder.fulfilled, (state) => {
+        state.orderStatus = "succeeded";
+      })
+      .addCase(postOrder.rejected, (state, action) => {
+        state.orderStatus = "failed";
+        state.orderError = action.payload;
+      });
   },
 });
 
-export const { addItem, removeItem, updateQuantity } = basketSlice.actions;
+export const { addItem, removeItem, updateQuantity, clearBasket } =
+  basketSlice.actions;
 export const selectBasket = (state) => state.basket.items;
 export const selectTotalBasketItems = (state) =>
   state.basket.items.reduce((total, item) => total + item.quantity, 0);
+export const selectOrderStatus = (state) => state.basket.orderStatus;
 
 export default basketSlice.reducer;

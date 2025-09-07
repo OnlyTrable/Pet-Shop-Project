@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem } from '../../redux/slices/basketSlice';
 import style from './styles.module.css';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
-import { Button, Grid, TextField, styled } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import {
   fetchCategories,
   selectCategories,
@@ -18,47 +18,10 @@ import {
   selectProductsStatus,
 } from '../../redux/slices/productsSlice';
 import { API_BASE_URL } from '../../redux';
+import DiscountForm from '../../components/DiscountForm';
 import discountImage from '../../assets/images/discount.png';
 
-const DiscountInput = styled(TextField)({
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#FFFFFF', // Потрібний колір рамки
-    },
-    '&:hover fieldset': {
-      borderColor: '#FFFFFF', // Колір рамки при наведенні
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#FFFFFF', // Колір рамки при фокусі
-    },
-    // Стилі для самого поля вводу
-    '& .MuiInputBase-input': {
-      color: '#FFFFFF', // Колір тексту, що вводиться
-      '&::placeholder': {
-        color: '#FFFFFF', // Колір плейсхолдера
-        opacity: 1, // Забираємо прозорість плейсхолдера
-      },
-    },
-    // Стилі для тексту-підказки (helperText)
-    '& .MuiFormHelperText-root': {
-      color: '#FFFFFF',
-    },
-  },
-});
-
 function MainPage() {
-  const [formValues, setFormValues] = useState({
-    name: '',
-    phone: '',
-    email: '',
-  });
-  const [formErrors, setFormErrors] = useState({
-    name: '',
-    phone: '',
-    email: '',
-  });
-  const [isFormValid, setIsFormValid] = useState(false);
-
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories);
   const status = useSelector(selectCategoriesStatus);
@@ -83,42 +46,6 @@ function MainPage() {
     }
   }, [status, productsStatus, dispatch]);
 
-  useEffect(() => {
-    const nameIsValid = formValues.name.length >= 3;
-    const phoneIsValid = /^\+\d{12}$/.test(formValues.phone);
-    // A practical, robust regex for email validation based on RFC 5322.
-    const emailIsValid = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i.test(formValues.email);
-
-    setIsFormValid(nameIsValid && phoneIsValid && emailIsValid);
-  }, [formValues]);
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
-
-    let error = '';
-    switch (name) {
-      case 'name':
-        if (value.length > 0 && value.length < 3) {
-          error = 'Name must be at least 3 characters long.';
-        }
-        break;
-      case 'phone':
-        if (value.length > 0 && !/^\+\d{12}$/.test(value)) {
-          error = 'Format: +XXXXXXXXXXXX (12 digits)';
-        }
-        break;
-      case 'email':
-        if (value.length > 0 && !/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i.test(value)) {
-          error = 'Please enter a valid email address.';
-        }
-        break;
-      default:
-        break;
-    }
-    setFormErrors({ ...formErrors, [name]: error });
-  };
-
   const randomCategories = useMemo(() => {
     if (categories.length > 0) {
       const shuffled = [...categories].sort(() => 0.5 - Math.random());
@@ -135,17 +62,6 @@ function MainPage() {
     }
     return [];
   }, [products]);
-
-  const handleDiscountSubmit = (event) => {
-    event.preventDefault();
-    if (isFormValid) {
-      console.log('Форма знижки відправлена!', formValues);
-      // Тут буде логіка для відправки даних на сервер
-    } else {
-      console.log('Форма містить помилки.');
-    }
-  };
-
 
   return (
     <main>
@@ -199,45 +115,7 @@ function MainPage() {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 5 }}>
-            <form className={style.discountForm} onSubmit={handleDiscountSubmit}>
-              <DiscountInput
-                name="name"
-                value={formValues.name}
-                onChange={handleInputChange}
-                variant="outlined"
-                placeholder="Name"
-                fullWidth
-                error={!!formErrors.name}
-                helperText={formErrors.name}
-              />
-              <DiscountInput
-                name="phone"
-                value={formValues.phone}
-                onChange={handleInputChange}
-                variant="outlined"
-                placeholder="Phone number"
-                fullWidth
-                error={!!formErrors.phone}
-                helperText={formErrors.phone}
-              />
-              <DiscountInput
-                name="email"
-                value={formValues.email}
-                onChange={handleInputChange}
-                variant="outlined"
-                placeholder="Email"
-                fullWidth
-                error={!!formErrors.email}
-                helperText={formErrors.email}
-              />
-              <Button
-                variant="discount"
-                type="submit"
-                disabled={!isFormValid}
-              >
-                Get a discount
-              </Button>
-            </form>
+            <DiscountForm />
           </Grid>
         </Grid>
       </section>
