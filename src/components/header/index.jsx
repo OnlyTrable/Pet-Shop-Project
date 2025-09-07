@@ -1,9 +1,14 @@
-import style from "./styles.module.css"
-import { Link } from "react-router-dom"
-import logo from "../../assets/icons/logo.svg"
-import basket from "../../assets/icons/basket.svg"
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Badge } from '@mui/material';
+import { selectTotalBasketItems } from '../../redux/slices/basketSlice';
+import style from './styles.module.css';
+import logo from '../../assets/icons/logo.svg';
+import basket from '../../assets/icons/basket.svg';
 
 function Header() {
+  const totalItems = useSelector(selectTotalBasketItems);
+
     return (
         <header className={style.header}>
             <Link to="/" className={style.logo}>
@@ -26,7 +31,23 @@ function Header() {
                 </ul>
             </nav>
             <Link to="/basket" className={style.basket}>
-                <img src={basket} alt="basket" />
+                <Badge
+                  badgeContent={totalItems}
+                  color="primary"
+                  invisible={totalItems === 0}
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      width: 26,
+                      height: 26,
+                      minWidth: 26,
+                      borderRadius: '50%',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                    },
+                  }}
+                >
+                    <img src={basket} alt="basket" />
+                </Badge>
             </Link>
         </header>
     )

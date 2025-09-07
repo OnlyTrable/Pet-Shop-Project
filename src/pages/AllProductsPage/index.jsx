@@ -18,6 +18,7 @@ import {
   selectProducts,
   selectProductsStatus,
 } from '../../redux/slices/productsSlice';
+import { addItem } from '../../redux/slices/basketSlice';
 import { API_BASE_URL } from '../../redux';
 import style from './styles.module.css';
 
@@ -40,6 +41,11 @@ function AllProductsPage() {
       dispatch(fetchProducts());
     }
   }, [productsStatus, dispatch]);
+
+  const handleAddToCart = (event, product) => {
+    event.preventDefault();
+    dispatch(addItem(product));
+  };
 
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
@@ -184,7 +190,12 @@ function AllProductsPage() {
                       -{Math.round(((product.price - product.discont_price) / product.price) * 100)}%
                     </div>
                   )}
-                  <Button className={style.addToCartButton}>Add to cart</Button>
+                  <Button
+                    className={style.addToCartButton}
+                    onClick={(e) => handleAddToCart(e, product)}
+                  >
+                    Add to cart
+                  </Button>
                 </div>
                 <p className={style.productTitle}>{product.title}</p>
                 <div className={style.priceContainer}>
