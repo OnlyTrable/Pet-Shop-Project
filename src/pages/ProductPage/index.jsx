@@ -14,6 +14,7 @@ import {
   selectProducts,
   selectProductsStatus,
 } from '../../redux/slices/productsSlice';
+import { addItem } from '../../redux/slices/basketSlice';
 import { API_BASE_URL } from '../../redux';
 import style from './styles.module.css';
 
@@ -44,6 +45,12 @@ function ProductPage() {
       .sort(() => 0.5 - Math.random())
       .slice(0, 3);
   }, [product, products]);
+
+  const handleAddToCart = () => {
+    if (product) {
+      dispatch(addItem({ ...product, quantity }));
+    }
+  };
 
 
   if (productsStatus === 'loading') {
@@ -125,6 +132,7 @@ function ProductPage() {
               </ButtonGroup>
               <Button
                 variant="cta"
+                onClick={handleAddToCart}
                 sx={{
                   height: '58px',
                   flexGrow: 1,

@@ -1,3 +1,10 @@
 .main {
-  padding: 20px;
+  padding: 20px 40px;
+}
+
+.divider {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #dddddd;
+  margin: 0 0 0 32px;
 }

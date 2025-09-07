@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { addItem } from '../../redux/slices/basketSlice';
 import style from './styles.module.css';
 import { Link } from 'react-router-dom';
 import { Button, Grid, TextField, styled } from '@mui/material';
@@ -65,6 +66,11 @@ function MainPage() {
   const products = useSelector(selectProducts);
   const productsStatus = useSelector(selectProductsStatus);
   const productsError = useSelector(selectProductsError);
+
+  const handleAddToCart = (event, product) => {
+    event.preventDefault();
+    dispatch(addItem(product));
+  };
 
   useEffect(() => {
     if (status === 'idle') {
@@ -260,7 +266,12 @@ function MainPage() {
                     <div className={style.discountBadge}>
                       -{Math.round(((product.price - product.discont_price) / product.price) * 100)}%
                     </div>
-                    <Button className={style.addToCartButton}>Add to cart</Button>
+                    <Button
+                      className={style.addToCartButton}
+                      onClick={(e) => handleAddToCart(e, product)}
+                    >
+                      Add to cart
+                    </Button>
                   </div>
                   <p className={style.productTitle}>{product.title}</p>
                   <div className={style.priceContainer}>

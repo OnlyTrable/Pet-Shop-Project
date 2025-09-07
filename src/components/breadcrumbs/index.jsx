@@ -62,8 +62,8 @@ function BreadcrumbsComponent() {
     }
   }
 
-  // Не показуємо "хлібні крихти" на головній сторінці
-  if (pathnames.length === 0) {
+  // Не показуємо "хлібні крихти" на головній сторінці та в кошику
+  if (location.pathname === '/' || location.pathname === '/basket') {
     return null;
   }
 
