@@ -51,6 +51,9 @@ function BreadcrumbsComponent() {
         '& .MuiBreadcrumbs-ol': {
           alignItems: 'center',
         },
+        '& .MuiBreadcrumbs-separator': {
+          mx: 0, // Видаляє горизонтальні відступи
+        },
       }}
     >
       <Button component={RouterLink} to="/" variant="breadcrumb">
