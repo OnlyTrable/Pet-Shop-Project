@@ -3,7 +3,7 @@ import { Button, TextField, styled } from '@mui/material';
 import toast from 'react-hot-toast';
 import style from './styles.module.css';
 
-const DiscountInput = styled(TextField)({
+const DarkInput = styled(TextField)({
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
       borderColor: '#FFFFFF',
@@ -27,9 +27,13 @@ const DiscountInput = styled(TextField)({
   },
 });
 
+const LightInput = styled(TextField)({
+  // Uses default MUI styles for light background
+});
+
 const DISCOUNT_REQUEST_LS_KEY = 'petShopDiscountRequest';
 
-function DiscountForm() {
+function DiscountForm({ variant = 'dark', onSuccess }) {
   const [formValues, setFormValues] = useState({
     name: '',
     phone: '',
@@ -77,7 +81,11 @@ function DiscountForm() {
         localStorage.setItem(DISCOUNT_REQUEST_LS_KEY, JSON.stringify(formValues));
         toast.success('Your request has been sent! A 5% discount is available on your first order.');
         setFormValues({ name: '', phone: '', email: '' });
+        if (onSuccess) {
+          onSuccess();
+        }
       } catch (error) {
+        console.error("Failed to save to localStorage", error);
         toast.error('Something went wrong. Please try again.');
       }
     } else {
@@ -85,13 +93,31 @@ function DiscountForm() {
     }
   };
 
+  const InputComponent = variant === 'dark' ? DarkInput : LightInput;
+  const buttonText = variant === 'dark' ? 'Get a discount' : 'Check out';
+
   return (
     <form className={style.discountForm} onSubmit={handleDiscountSubmit}>
-      <DiscountInput name="name" value={formValues.name} onChange={handleInputChange} variant="outlined" placeholder="Name" fullWidth error={!!formErrors.name} helperText={formErrors.name} />
-      <DiscountInput name="phone" value={formValues.phone} onChange={handleInputChange} variant="outlined" placeholder="Phone number" fullWidth error={!!formErrors.phone} helperText={formErrors.phone} />
-      <DiscountInput name="email" value={formValues.email} onChange={handleInputChange} variant="outlined" placeholder="Email" fullWidth error={!!formErrors.email} helperText={formErrors.email} />
-      <Button variant="discount" type="submit" disabled={!isFormValid}>
-        Get a discount
+      <InputComponent name="name" value={formValues.name} onChange={handleInputChange} variant="outlined" placeholder="Name" fullWidth error={!!formErrors.name} helperText={formErrors.name} />
+      <InputComponent name="phone" value={formValues.phone} onChange={handleInputChange} variant="outlined" placeholder="Phone number" fullWidth error={!!formErrors.phone} helperText={formErrors.phone} />
+      <InputComponent name="email" value={formValues.email} onChange={handleInputChange} variant="outlined" placeholder="Email" fullWidth error={!!formErrors.email} helperText={formErrors.email} />
+      <Button
+        type="submit"
+        disabled={!isFormValid}
+        fullWidth
+        sx={{
+          height: '76px',
+          fontSize: '28px',
+          fontWeight: 700,
+          textTransform: 'none',
+          bgcolor: variant === 'dark' ? '#FFFFFF' : '#0D50FF',
+          color: variant === 'dark' ? '#282828' : '#FFFFFF',
+          '&:hover': {
+            bgcolor: variant === 'dark' ? '#f0f0f0' : '#282828',
+          },
+        }}
+      >
+        {buttonText}
       </Button>
     </form>
   );
