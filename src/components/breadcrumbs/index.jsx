@@ -1,4 +1,4 @@
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation, matchPath } from 'react-router-dom';
 import { Breadcrumbs, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectCategories } from '../../redux/slices/categoriesSlice';
@@ -16,9 +16,51 @@ const BreadcrumbDivider = () => <div className={style.divider} />;
 function BreadcrumbsComponent() {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
-
   const categories = useSelector(selectCategories);
   const products = useSelector(selectProducts);
+
+  // Special handling for product pages to show the category path
+  const productPageMatch = matchPath('/products/:id', location.pathname);
+  if (productPageMatch) {
+    const productId = parseInt(productPageMatch.params.id, 10);
+    const product = products.find(p => p.id === productId);
+    if (product) {
+      const category = categories.find(c => c.id === product.categoryId);
+      if (category) {
+        return (
+          <Breadcrumbs
+            aria-label="breadcrumb"
+            separator={<BreadcrumbDivider />}
+            sx={{
+              padding: '8px 16px',
+              '& .MuiBreadcrumbs-ol': { alignItems: 'center' },
+              '& .MuiBreadcrumbs-separator': { mx: 0 },
+            }}
+          >
+            <Button component={RouterLink} to="/" variant="breadcrumb">
+              Main Page
+            </Button>
+            <Button component={RouterLink} to="/categories" variant="breadcrumb">
+              Categories
+            </Button>
+            <Button component={RouterLink} to={`/categories/${category.id}`} variant="breadcrumb">
+              {category.title}
+            </Button>
+            <Button
+              variant="breadcrumb"
+              sx={{
+                color: 'text.primary',
+                pointerEvents: 'none',
+                '&:hover': { backgroundColor: 'transparent' },
+              }}
+            >
+              {product.title}
+            </Button>
+          </Breadcrumbs>
+        );
+      }
+    }
+  }
 
   // Не показуємо "хлібні крихти" на головній сторінці
   if (pathnames.length === 0) {
