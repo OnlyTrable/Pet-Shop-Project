@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
@@ -18,10 +18,16 @@ import {
   selectProducts,
   selectProductsStatus,
 } from '../../redux/slices/productsSlice';
+import {
+  fetchCategories,
+  selectCategories,
+  selectCategoriesStatus,
+} from '../../redux/slices/categoriesSlice';
 import { API_BASE_URL } from '../../redux';
 import style from './styles.module.css';
 
-function AllProductsPage() {
+function CategoryPage() {
+  const { id } = useParams();
   const dispatch = useDispatch();
 
   // State for filters
@@ -33,37 +39,48 @@ function AllProductsPage() {
   // Selectors for data and status
   const products = useSelector(selectProducts);
   const productsStatus = useSelector(selectProductsStatus);
+  const categories = useSelector(selectCategories);
+  const categoriesStatus = useSelector(selectCategoriesStatus);
 
   // Fetch data if not already present
   useEffect(() => {
     if (productsStatus === 'idle') {
       dispatch(fetchProducts());
     }
-  }, [productsStatus, dispatch]);
+    if (categoriesStatus === 'idle') {
+      dispatch(fetchCategories());
+    }
+  }, [productsStatus, categoriesStatus, dispatch]);
+
+  // Find the current category
+  const category = useMemo(
+    () => categories.find(cat => cat.id === parseInt(id, 10)),
+    [categories, id]
+  );
 
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
-    if (products.length === 0) return [];
+    if (!category || products.length === 0) return [];
 
-    let allProducts = [...products];
+    let categoryProducts = products.filter(p => p.categoryId === category.id);
 
     if (showDiscounted) {
-      allProducts = allProducts.filter(p => p.discont_price);
+      categoryProducts = categoryProducts.filter(p => p.discont_price);
     }
 
     if (priceFrom) {
-      allProducts = allProducts.filter(
+      categoryProducts = categoryProducts.filter(
         p => (p.discont_price || p.price) >= parseFloat(priceFrom)
       );
     }
 
     if (priceTo) {
-      allProducts = allProducts.filter(
+      categoryProducts = categoryProducts.filter(
         p => (p.discont_price || p.price) <= parseFloat(priceTo)
       );
     }
 
-    const sortedProducts = [...allProducts];
+    const sortedProducts = [...categoryProducts];
     switch (sortOrder) {
       case 'price_asc':
         sortedProducts.sort(
@@ -82,7 +99,7 @@ function AllProductsPage() {
     }
 
     return sortedProducts;
-  }, [products, showDiscounted, priceFrom, priceTo, sortOrder]);
+  }, [products, category, showDiscounted, priceFrom, priceTo, sortOrder]);
 
   const handlePriceChange = (setter) => (event) => {
     const value = event.target.value;
@@ -91,7 +108,7 @@ function AllProductsPage() {
     }
   };
 
-  if (productsStatus === 'loading') {
+  if (categoriesStatus === 'loading' || productsStatus === 'loading') {
     return (
       <Box className={style.center}>
         <CircularProgress />
@@ -99,10 +116,18 @@ function AllProductsPage() {
     );
   }
 
+  if (!category) {
+    return (
+      <Box className={style.center}>
+        <Typography variant="h5">Category not found.</Typography>
+      </Box>
+    );
+  }
+
   return (
     <main className={style.main}>
       <Typography variant="h1" sx={{ fontSize: '64px', fontWeight: 700, mb: '40px' }}>
-        All products
+        {category.title}
       </Typography>
 
       <Box className={style.filtersContainer}>
@@ -202,4 +227,4 @@ function AllProductsPage() {
   );
 }
 
-export default AllProductsPage;
+export default CategoryPage;

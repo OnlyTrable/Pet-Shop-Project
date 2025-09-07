@@ -8,7 +8,6 @@ import BreadcrumbsComponent from './components/breadcrumbs';
 // Import page components
 import MainPage from './pages/MainPage';
 import CategoriesPage from './pages/CategoriesPage';
-import ProductsPage from './pages/ProductsPage';
 import SalesPage from './pages/SalesPage';
 import ProductPage from './pages/ProductPage';
 import CategoryPage from './pages/CategoryPage';
@@ -26,7 +25,6 @@ function App() {
         <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/categories/:id" element={<CategoryPage />} />
         <Route path="/products" element={<AllProductsPage />} />
-        <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/:id" element={<ProductPage />} />
         <Route path="/sales" element={<SalesPage />} />
         <Route path="/basket" element={<BasketPage />} />
