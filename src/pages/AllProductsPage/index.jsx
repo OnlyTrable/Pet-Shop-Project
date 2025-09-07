@@ -101,7 +101,7 @@ function AllProductsPage() {
 
   return (
     <main className={style.main}>
-      <Typography variant="h1" sx={{ fontSize: '64px', fontWeight: 700, mb: '40px' }}>
+      <Typography variant="h1" sx={{ fontSize: '64px', fontWeight: 700, mb: '40px', textAlign: 'left' }}>
         All products
       </Typography>
 
