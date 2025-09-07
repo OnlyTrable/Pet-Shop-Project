@@ -263,8 +263,8 @@ function MainPage() {
                     <Button className={style.addToCartButton}>Add to cart</Button>
                   </div>
                   <div className={style.priceContainer}>
-                    <p className={style.discountPrice}>${product.discont_price}</p>
-                    <p className={style.originalPrice}>${product.price}</p>
+                    <p className={style.discountPrice}>${product.discont_price.toFixed(2)}</p>
+                    <p className={style.originalPrice}>${product.price.toFixed(2)}</p>
                   </div>
                   <p className={style.productTitle}>{product.title}</p>
                 </Link>
