@@ -59,6 +59,26 @@ export default createTheme({
           }),
         },
         {
+          props: { variant: "breadcrumb" },
+          style: ({ theme }) => ({
+            height: "36px",
+            color: theme.palette.tertiary.main,
+            fontWeight: 500,
+            fontSize: "16px",
+            padding: "8px 16px",
+            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: "6px",
+            textTransform: "none",
+            width: "auto",
+            minWidth: "auto",
+            "&:hover": {
+              backgroundColor: theme.palette.text.primary,
+              color: theme.palette.common.white,
+              borderColor: theme.palette.text.primary,
+            },
+          }),
+        },
+        {
           props: { variant: "discount" },
           style: ({ theme }) => ({
             width: "100%",

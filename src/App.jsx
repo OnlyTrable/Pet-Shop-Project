@@ -3,6 +3,7 @@ import './App.css'
 
 import Header from './components/header'
 import Footer from './components/footer'
+import BreadcrumbsComponent from './components/breadcrumbs';
 
 // Import page components
 import MainPage from './pages/MainPage';
@@ -18,6 +19,7 @@ function App() {
   return (
     <BrowserRouter>
       <Header/>
+      <BreadcrumbsComponent />
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/categories" element={<CategoriesPage />} />
