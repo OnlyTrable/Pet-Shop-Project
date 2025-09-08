@@ -138,10 +138,19 @@ function BasketPage() {
           </Grid>
         </Grid>
       ) : (
-        <Box sx={{ textAlign: "center", py: 8 }}>
-          <Typography variant="h4" sx={{ color: 'text.secondary' }}>
-            Your basket is empty
+        <Box sx={{ textAlign: "left", py: 8 }}>
+          <Typography variant="h4" sx={{ color: 'text.secondary', mb: 4 }}>
+            Looks like you have no items in your basket currently.
           </Typography>
+          <Button
+          component={RouterLink}
+          to="/products"
+          variant="cta"
+          sx={{ "&:hover": {
+              backgroundColor: '#282828',
+            } }}>
+          Back to the store
+        </Button>
         </Box>
       )}
     </main>

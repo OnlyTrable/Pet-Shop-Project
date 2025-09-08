@@ -32,6 +32,7 @@ function OrderSummaryCard({
     >
       <Typography
         sx={{
+          textAlign: 'left',
           fontWeight: 700,
           fontSize: '40px',
           lineHeight: 1.1,

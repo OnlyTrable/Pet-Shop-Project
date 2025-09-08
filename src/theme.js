@@ -24,7 +24,7 @@ export default createTheme({
     MuiButton: {
       variants: [
         {
-          props: { variant: "cta" }, // Call-to-action button (Hero, NotFound)
+          props: { variant: "cta" }, // Call-to-action button (Hero, NotFound, EmptyBasket)
           style: ({ theme }) => ({
             height: "58px",
             backgroundColor: theme.palette.primary.main,
