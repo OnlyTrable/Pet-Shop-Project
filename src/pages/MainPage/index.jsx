@@ -18,7 +18,7 @@ import {
   selectProductsStatus,
 } from '../../redux/slices/productsSlice';
 import { API_BASE_URL } from '../../redux';
-import DiscountForm from '../../components/DiscountForm';
+import DiscountForm from '../../components/discountForm';
 import discountImage from '../../assets/images/discount.png';
 
 function MainPage() {

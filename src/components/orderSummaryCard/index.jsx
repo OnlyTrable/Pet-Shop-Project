@@ -5,7 +5,7 @@ import {
   Card,
   CircularProgress,
 } from "@mui/material";
-import DiscountForm from "../DiscountForm";
+import DiscountForm from "../discountForm";
 
 function OrderSummaryCard({
   itemsCount,

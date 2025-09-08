@@ -11,8 +11,8 @@ import {
   clearBasket,
   selectOrderStatus,
 } from "../../redux/slices/basketSlice";
-import BasketItemCard from "../../components/BasketItemCard";
-import OrderSummaryCard from "../../components/OrderSummaryCard";
+import BasketItemCard from "../../components/basketItemCard";
+import OrderSummaryCard from "../../components/orderSummaryCard";
 import style from "./styles.module.css";
 
 const DISCOUNT_REQUEST_LS_KEY = 'petShopDiscountRequest';
@@ -146,10 +146,8 @@ function BasketPage() {
           component={RouterLink}
           to="/products"
           variant="cta"
-          sx={{ "&:hover": {
-              backgroundColor: '#282828',
-            } }}>
-          Back to the store
+          >
+          Continue Shopping
         </Button>
         </Box>
       )}

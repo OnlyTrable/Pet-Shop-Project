@@ -35,7 +35,7 @@ export default createTheme({
             borderRadius: "6px",
             textTransform: "none",
             "&:hover": {
-              backgroundColor: theme.palette.primary.dark,
+              backgroundColor: theme.palette.text.primary,
             },
           }),
         },
