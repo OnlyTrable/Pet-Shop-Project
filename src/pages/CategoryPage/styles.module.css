@@ -1,31 +1,8 @@
 .main {
-  padding: 0 40px;
-  /*background-color: #f9f9f9;*/
+  padding: 0 40px 40px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-}
-
-.filtersContainer {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  padding: 20px;
-  margin-bottom: 40px;
-}
-
-.priceFilter {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.priceFilter > p {
-  margin-right: 10px;
-}
-
-.sortControl {
-  min-width: 180px;
 }
 
 .productsContainer {

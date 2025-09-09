@@ -1,0 +1,23 @@
+.filtersContainer {
+  max-height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 20px 20px 20px 0;
+  margin-bottom: 40px;
+  box-sizing: border-box;
+}
+
+.priceFilter {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.priceFilter > p {
+  margin-right: 10px;
+}
+
+.sortControl {
+  min-width: 180px;
+}

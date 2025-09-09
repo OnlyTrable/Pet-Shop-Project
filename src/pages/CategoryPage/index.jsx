@@ -5,12 +5,6 @@ import {
   Box,
   Typography,
   Button,
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  Select,
-  MenuItem,
-  FormControl,
   CircularProgress,
 } from '@mui/material';
 import {
@@ -26,6 +20,7 @@ import {
 import { addItem } from '../../redux/slices/basketSlice';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '../../redux';
+import ProductFilters from '../../components/productFilters';
 import style from './styles.module.css';
 
 function CategoryPage() {
@@ -33,10 +28,12 @@ function CategoryPage() {
   const dispatch = useDispatch();
 
   // State for filters
-  const [priceFrom, setPriceFrom] = useState('');
-  const [priceTo, setPriceTo] = useState('');
-  const [showDiscounted, setShowDiscounted] = useState(false);
-  const [sortOrder, setSortOrder] = useState('default');
+  const [filters, setFilters] = useState({
+    priceFrom: '',
+    priceTo: '',
+    showDiscounted: false,
+    sortOrder: 'default',
+  });
 
   // Selectors for data and status
   const products = useSelector(selectProducts);
@@ -72,24 +69,24 @@ function CategoryPage() {
 
     let categoryProducts = products.filter(p => p.categoryId === category.id);
 
-    if (showDiscounted) {
+    if (filters.showDiscounted) {
       categoryProducts = categoryProducts.filter(p => p.discont_price);
     }
 
-    if (priceFrom) {
+    if (filters.priceFrom) {
       categoryProducts = categoryProducts.filter(
-        p => (p.discont_price || p.price) >= parseFloat(priceFrom)
+        p => (p.discont_price || p.price) >= parseFloat(filters.priceFrom)
       );
     }
 
-    if (priceTo) {
+    if (filters.priceTo) {
       categoryProducts = categoryProducts.filter(
-        p => (p.discont_price || p.price) <= parseFloat(priceTo)
+        p => (p.discont_price || p.price) <= parseFloat(filters.priceTo)
       );
     }
 
     const sortedProducts = [...categoryProducts];
-    switch (sortOrder) {
+    switch (filters.sortOrder) {
       case 'price_asc':
         sortedProducts.sort(
           (a, b) => (a.discont_price || a.price) - (b.discont_price || b.price)
@@ -110,13 +107,10 @@ function CategoryPage() {
     }
 
     return sortedProducts;
-  }, [products, category, showDiscounted, priceFrom, priceTo, sortOrder]);
+  }, [products, category, filters]);
 
-  const handlePriceChange = (setter) => (event) => {
-    const value = event.target.value;
-    if (value === '' || /^\d*\.?\d*$/.test(value)) {
-      setter(value);
-    }
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
   };
 
   if (categoriesStatus === 'loading' || productsStatus === 'loading') {
@@ -141,73 +135,11 @@ function CategoryPage() {
         {category.title}
       </Typography>
 
-      <Box className={style.filtersContainer}>
-        <Box className={style.priceFilter}>
-          <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>Price</Typography>
-          <TextField
-           label="from"
-            variant="outlined"
-            value={priceFrom}
-            onChange={handlePriceChange(setPriceFrom)}
-            size="small"
-            sx={{
-              maxWidth: '112px',
-          }}  
-          />
-          <TextField
-            label="to"
-            variant="outlined"
-            value={priceTo}
-            onChange={handlePriceChange(setPriceTo)}
-            size="small"
-            sx={{
-              maxWidth: '112px',
-            }}
-          />
-        </Box>
-        <FormControlLabel
-          labelPlacement="start"
-          control={
-            <Checkbox
-              sx={{
-                color: 'transparent', // Робить іконку прозорою у стані "не обрано"
-                '& .MuiSvgIcon-root': {
-                  fontSize: 40,
-                  border: '1px solid #DDDDDD',
-                  borderRadius: '6px',
-                },
-                '&.Mui-checked': {
-                  color: 'primary.main', // Колір "галочки"
-                  '& .MuiSvgIcon-root': {
-                    border: '1px solid transparent', // Приховує рамку в стані "обрано"
-                  },
-                },
-              }}
-              checked={showDiscounted}
-              onChange={e => setShowDiscounted(e.target.checked)}
-            />
-          }
-          label={<Typography sx={{ fontSize: '20px', fontWeight: 600 }}>Discounted items</Typography>}
-        />
-        <Box className={style.priceFilter}>
-          <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>Sorted by</Typography>
-          <FormControl
-            size="small"
-            className={style.sortControl}
-          >
-            <Select
-              value={sortOrder}
-              onChange={e => setSortOrder(e.target.value)}
-              displayEmpty
-            >
-              <MenuItem value="default">by default</MenuItem>
-              <MenuItem value="newest">newest</MenuItem>
-              <MenuItem value="price_asc">price: low-high</MenuItem>
-              <MenuItem value="price_desc">price: high-low</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
+      <ProductFilters
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        showDiscountedFilter={true}
+      />
 
       <Box className={style.productsContainer}>
         {filteredAndSortedProducts.length > 0 ? (
