@@ -1,5 +1,5 @@
 .main {
-  padding: 20px 40px;
+  padding: 0 40px;
   /*background-color: #f9f9f9;*/
   flex-grow: 1;
   display: flex;
@@ -87,8 +87,8 @@
 
 .discountBadge {
   position: absolute;
-  top: 4px;
-  right: 8px;
+  top: 16px;
+  right: 16px;
   background-color: #0d50ff; /* Using primary color from theme */
   color: white;
   padding: 4px 8px;

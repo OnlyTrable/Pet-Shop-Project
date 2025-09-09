@@ -83,6 +83,9 @@ function AllProductsPage() {
           (a, b) => (b.discont_price || b.price) - (a.discont_price || a.price)
         );
         break;
+      case 'newest':
+        sortedProducts.sort((a, b) => b.id - a.id);
+        break;
       case 'default':
       default:
         sortedProducts.sort((a, b) => a.id - b.id);
@@ -159,6 +162,7 @@ function AllProductsPage() {
               displayEmpty
             >
               <MenuItem value="default">by default</MenuItem>
+              <MenuItem value="newest">newest</MenuItem>
               <MenuItem value="price_asc">price: low-high</MenuItem>
               <MenuItem value="price_desc">price: high-low</MenuItem>
             </Select>

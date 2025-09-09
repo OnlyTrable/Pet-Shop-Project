@@ -37,8 +37,8 @@
 
 .discountBadge {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 16px;
+  right: 16px;
   background-color: var(--primary-main);
   color: var(--primary-contrast-text);
   padding: 4px 8px;

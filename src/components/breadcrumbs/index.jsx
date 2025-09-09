@@ -32,7 +32,7 @@ function BreadcrumbsComponent() {
             aria-label="breadcrumb"
             separator={<BreadcrumbDivider />}
             sx={{
-              padding: '8px 16px',
+              margin: '39px 0 40px 40px',
               '& .MuiBreadcrumbs-ol': { alignItems: 'center' },
               '& .MuiBreadcrumbs-separator': { mx: 0 },
             }}
@@ -89,7 +89,7 @@ function BreadcrumbsComponent() {
       aria-label="breadcrumb"
       separator={<BreadcrumbDivider />}
       sx={{
-        padding: '8px 16px',
+        margin: '39px 0 40px 40px',
         '& .MuiBreadcrumbs-ol': {
           alignItems: 'center',
         },
