@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
@@ -24,6 +24,7 @@ function ProductPage() {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const products = useSelector(selectProducts);
   const productsStatus = useSelector(selectProductsStatus);
@@ -38,6 +39,13 @@ function ProductPage() {
     () => products.find(p => p.id === parseInt(id, 10)),
     [products, id]
   );
+
+  useEffect(() => {
+    // Redirect if product is not found after data has loaded
+    if (productsStatus === 'succeeded' && products.length > 0 && !product) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [productsStatus, products, product, navigate]);
 
   const relatedProducts = useMemo(() => {
     if (!product || products.length <= 1) return [];
@@ -63,10 +71,11 @@ function ProductPage() {
     );
   }
 
+  // If product is not found (even after loading), show loader while we navigate away.
   if (!product) {
     return (
       <Box className={style.center}>
-        <Typography variant="h5">Product not found.</Typography>
+        <CircularProgress />
       </Box>
     );
   }

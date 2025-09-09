@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
@@ -26,6 +26,7 @@ import style from './styles.module.css';
 function CategoryPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // State for filters
   const [filters, setFilters] = useState({
@@ -56,6 +57,13 @@ function CategoryPage() {
     () => categories.find(cat => cat.id === parseInt(id, 10)),
     [categories, id]
   );
+
+  useEffect(() => {
+    // Redirect if category is not found after data has loaded
+    if (categoriesStatus === 'succeeded' && categories.length > 0 && !category) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [categoriesStatus, categories, category, navigate]);
 
   const handleAddToCart = (event, product) => {
     event.preventDefault();
@@ -121,10 +129,11 @@ function CategoryPage() {
     );
   }
 
+  // If category is not found (even after loading), show loader while we navigate away.
   if (!category) {
     return (
       <Box className={style.center}>
-        <Typography variant="h5">Category not found.</Typography>
+        <CircularProgress />
       </Box>
     );
   }
