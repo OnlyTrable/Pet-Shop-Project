@@ -169,6 +169,20 @@ function CategoryPage() {
           labelPlacement="start"
           control={
             <Checkbox
+              sx={{
+                color: 'transparent', // Робить іконку прозорою у стані "не обрано"
+                '& .MuiSvgIcon-root': {
+                  fontSize: 40,
+                  border: '1px solid #DDDDDD',
+                  borderRadius: '6px',
+                },
+                '&.Mui-checked': {
+                  color: 'primary.main', // Колір "галочки"
+                  '& .MuiSvgIcon-root': {
+                    border: '1px solid transparent', // Приховує рамку в стані "обрано"
+                  },
+                },
+              }}
               checked={showDiscounted}
               onChange={e => setShowDiscounted(e.target.checked)}
             />
