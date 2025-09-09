@@ -11,6 +11,7 @@ import {
   clearBasket,
   selectOrderStatus,
 } from "../../redux/slices/basketSlice";
+import OrderSuccessToast from "../../components/orderSuccessToast";
 import BasketItemCard from "../../components/basketItemCard";
 import OrderSummaryCard from "../../components/orderSummaryCard";
 import style from "./styles.module.css";
@@ -73,7 +74,12 @@ function BasketPage() {
 
     try {
       await dispatch(postOrder(orderData)).unwrap();
-      toast.success('Your order has been placed successfully!');
+      toast.custom(
+        (t) => <OrderSuccessToast t={t} visible={t.visible} />,
+        {
+          duration: 5000,
+          id: 'order-success-toast', // prevent duplicates
+        });
       if (discountStatus === 'available') {
         // Позначаємо знижку як використану, а не видаляємо запис
         const discountRequestJSON = localStorage.getItem(DISCOUNT_REQUEST_LS_KEY);
@@ -88,7 +94,6 @@ function BasketPage() {
         }
       }
       dispatch(clearBasket());
-      navigate('/');
     } catch (error) {
       toast.error(typeof error === 'string' ? error : 'An unknown error occurred.');
     }

@@ -32,9 +32,21 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer/>
-      <Toaster position="top-right" toastOptions={{ duration: 3000 }} containerStyle={{
-    top: 90, // Наприклад, відступ 80px зверху
-  }}/>
+      <Toaster
+        position="top-right"
+        containerStyle={{
+          top: 90,
+        }}
+        toastOptions={{
+          duration: 3000,
+          success: {
+            iconTheme: {
+              primary: '#0D50FF',
+              secondary: '#FFFFFF',
+            },
+          },
+        }}
+      />
     </BrowserRouter>
   )
 }
