@@ -124,9 +124,6 @@ function AllProductsPage() {
             size="small"
             sx={{
               maxWidth: '112px',
-              '& .MuiInputBase-root': {
-                height: '36px',
-              },
             }}
           />
           <TextField
@@ -137,9 +134,6 @@ function AllProductsPage() {
             size="small"
             sx={{
               maxWidth: '112px',
-              '& .MuiInputBase-root': {
-                height: '36px',
-              },
             }}
           />
         </Box>
@@ -158,11 +152,6 @@ function AllProductsPage() {
           <FormControl
             size="small"
             className={style.sortControl}
-            sx={{
-              '& .MuiInputBase-root': {
-                height: '36px',
-              },
-            }}
           >
             <Select
               value={sortOrder}

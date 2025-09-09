@@ -134,7 +134,7 @@ function CategoryPage() {
 
   return (
     <main className={style.main}>
-      <Typography variant="h1" sx={{ fontSize: '64px', fontWeight: 700, mb: '40px' }}>
+      <Typography variant="h1" sx={{ fontSize: '64px', fontWeight: 700, mb: '40px', textAlign: 'left' }}>
         {category.title}
       </Typography>
 
@@ -142,17 +142,14 @@ function CategoryPage() {
         <Box className={style.priceFilter}>
           <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>Price</Typography>
           <TextField
-            label="from"
+           label="from"
             variant="outlined"
             value={priceFrom}
             onChange={handlePriceChange(setPriceFrom)}
             size="small"
             sx={{
               maxWidth: '112px',
-              '& .MuiInputBase-root': {
-                height: '36px',
-              },
-            }}
+          }}  
           />
           <TextField
             label="to"
@@ -162,9 +159,6 @@ function CategoryPage() {
             size="small"
             sx={{
               maxWidth: '112px',
-              '& .MuiInputBase-root': {
-                height: '36px',
-              },
             }}
           />
         </Box>
@@ -183,11 +177,6 @@ function CategoryPage() {
           <FormControl
             size="small"
             className={style.sortControl}
-            sx={{
-              '& .MuiInputBase-root': {
-                height: '36px',
-              },
-            }}
           >
             <Select
               value={sortOrder}

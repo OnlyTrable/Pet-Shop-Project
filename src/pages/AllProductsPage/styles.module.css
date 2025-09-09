@@ -7,11 +7,13 @@
 }
 
 .filtersContainer {
+  max-height: 36px;
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 40px;
   padding: 20px;
   margin-bottom: 40px;
+  box-sizing: border-box;
 }
 
 .priceFilter {

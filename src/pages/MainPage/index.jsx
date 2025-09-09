@@ -5,6 +5,7 @@ import style from './styles.module.css';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@mui/material';
+import ProductCard from '../../components/productCard';
 import {
   fetchCategories,
   selectCategories,
@@ -31,10 +32,9 @@ function MainPage() {
   const productsStatus = useSelector(selectProductsStatus);
   const productsError = useSelector(selectProductsError);
 
-  const handleAddToCart = (event, product) => {
-    event.preventDefault();
+  const handleAddToCart = (product) => {
     dispatch(addItem(product));
-    toast.success(`${product.title} added to cart!`);
+    toast.success(`"${product.title}" added to cart!`);
   };
 
   useEffect(() => {
@@ -137,28 +137,11 @@ function MainPage() {
           {productsStatus === 'succeeded' &&
             (saleProducts.length > 0 ? (
               saleProducts.map(product => (
-                <Link to={`/products/${product.id}`} key={product.id} className={style.productCard}>
-                  <div className={style.productImageContainer}>
-                    <div
-                      className={style.productImage}
-                      style={{ backgroundImage: `url(${API_BASE_URL}${product.image})` }}
-                    />
-                    <div className={style.discountBadge}>
-                      -{Math.round(((product.price - product.discont_price) / product.price) * 100)}%
-                    </div>
-                    <Button
-                      className={style.addToCartButton}
-                      onClick={(e) => handleAddToCart(e, product)}
-                    >
-                      Add to cart
-                    </Button>
-                  </div>
-                  <p className={style.productTitle}>{product.title}</p>
-                  <div className={style.priceContainer}>
-                    <p className={style.discountPrice}>${product.discont_price.toFixed(2)}</p>
-                    <p className={style.originalPrice}>${product.price.toFixed(2)}</p>
-                  </div>
-                </Link>
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                />
               ))
             ) : (
               <p>No sale products found.</p>
