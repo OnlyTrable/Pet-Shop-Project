@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ScrollToTop from "./utils/ScrollToTop";
 import { Toaster } from 'react-hot-toast';
 import './App.css'
 
@@ -19,6 +20,7 @@ import AllProductsPage from './pages/AllProductsPage';
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Header/>
       <BreadcrumbsComponent />
       <Routes>

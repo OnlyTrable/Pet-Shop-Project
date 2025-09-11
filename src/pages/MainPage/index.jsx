@@ -67,7 +67,7 @@ function MainPage() {
     <main>
       <section className={style.heroSection}>
         <div className={style.heroContent}>
-          <h1>Amazing Discounts on Pets Products!</h1>
+          <h1>Amazing Discounts on Pets Products!</h1>
           <Button component={Link} to="/sales" variant="cta">
             Check out
           </Button>

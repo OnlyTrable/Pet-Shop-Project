@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { Box, Typography, Button, Grid } from "@mui/material";
 import toast from 'react-hot-toast';
 import {
@@ -20,7 +20,6 @@ const DISCOUNT_REQUEST_LS_KEY = 'petShopDiscountRequest';
 
 function BasketPage() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const basketItems = useSelector(selectBasket);
   const orderStatus = useSelector(selectOrderStatus);
   const [discountStatus, setDiscountStatus] = useState('checking'); // 'checking', 'none', 'available', 'used'
