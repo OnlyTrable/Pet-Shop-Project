@@ -22,8 +22,8 @@ function Footer (){
           <div className={style.contactCard}>
             <p className={style.label}>Socials</p>
             <div className={style.socials}>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                <img src={instagramIcon} alt="Instagram" />
+              <a href="https://www.instagram.com/itcareerhub/" target="_blank" rel="noopener noreferrer">
+                <img src={instagramIcon} alt="Instagram itcareerhub" />
               </a>
               <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer">
                 <img src={whatsappIcon} alt="WhatsApp" />
